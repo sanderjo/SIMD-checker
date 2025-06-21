@@ -50,3 +50,28 @@ simd_example.c:7:23: optimized: loop vectorized using 32 byte vectors
 simd_example.c:17:23: optimized: loop vectorized using 32 byte vectors
 ```
 
+Check x86 binary for SIMD:
+
+```
+$ objdump -d simd_example | grep -E 'xmm|ymm|zmm'
+    1118:	c5 fd 6f 0d 00 0f 00 	vmovdqa 0xf00(%rip),%ymm1        # 2020 <_IO_stdin_used+0x20>
+    1123:	62 f2 7d 28 7c da    	vpbroadcastd %edx,%ymm3
+    1140:	c5 fd 6f c1          	vmovdqa %ymm1,%ymm0
+    1144:	c5 f5 fe cb          	vpaddd %ymm3,%ymm1,%ymm1
+    1148:	c5 fc 5b d0          	vcvtdq2ps %ymm0,%ymm2
+    114c:	c5 fd 72 f0 01       	vpslld $0x1,%ymm0,%ymm0
+    1151:	c4 c1 7c 11 14 04    	vmovups %ymm2,(%r12,%rax,1)
+    1157:	c5 fc 5b c0          	vcvtdq2ps %ymm0,%ymm0
+    115b:	c5 fc 11 04 03       	vmovups %ymm0,(%rbx,%rax,1)
+    1180:	c4 c1 7c 10 04 04    	vmovups (%r12,%rax,1),%ymm0
+    1186:	c5 fc 58 04 03       	vaddps (%rbx,%rax,1),%ymm0,%ymm0
+    118b:	c4 c1 7c 11 44 05 00 	vmovups %ymm0,0x0(%r13,%rax,1)
+    11aa:	c5 f8 57 c0          	vxorps %xmm0,%xmm0,%xmm0
+    11b3:	c4 c1 7a 5a 85 90 01 	vcvtss2sd 0x190(%r13),%xmm0,%xmm0
+    1340:	c5 fc 10 04 06       	vmovups (%rsi,%rax,1),%ymm0
+    1345:	c5 fc 58 04 07       	vaddps (%rdi,%rax,1),%ymm0,%ymm0
+    134a:	c5 fc 11 04 02       	vmovups %ymm0,(%rdx,%rax,1)
+    1380:	c5 fa 10 04 07       	vmovss (%rdi,%rax,1),%xmm0
+    1385:	c5 fa 58 04 06       	vaddss (%rsi,%rax,1),%xmm0,%xmm0
+    138a:	c5 fa 11 04 02       	vmovss %xmm0,(%rdx,%rax,1)
+```
