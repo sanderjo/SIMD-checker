@@ -24,6 +24,26 @@ vse32.v
 vsetvli
 vsll.vi
 ```
+or
+```
+$ objdump -d simd_example | grep -E 'v[0-9]+'
+   1053a:	5208a1d7          	vid.v	v3
+   1054c:	4a3190d7          	vfcvt.f.x.v	v1,v3
+   10550:	9630b157          	vsll.vi	v2,v3,1
+   10556:	0206e0a7          	vse32.v	v1,(a3)
+   1055a:	4a219157          	vfcvt.f.x.v	v2,v2
+   10562:	5e07c0d7          	vmv.v.x	v1,a5
+   1056c:	02066127          	vse32.v	v2,(a2)
+   10574:	023081d7          	vadd.vv	v3,v3,v1
+   1058c:	0205e107          	vle32.v	v2,(a1)
+   10590:	02086087          	vle32.v	v1,(a6)
+   1059e:	021110d7          	vfadd.vv	v1,v1,v2
+   105a2:	0206e0a7          	vse32.v	v1,(a3)
+   106e0:	02056087          	vle32.v	v1,(a0)
+   106e4:	0205e107          	vle32.v	v2,(a1)
+   106f2:	021110d7          	vfadd.vv	v1,v1,v2
+   106f6:	020660a7          	vse32.v	v1,(a2)
+```
 
 Or extra info during compiling:
 
