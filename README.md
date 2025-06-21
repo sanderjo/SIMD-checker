@@ -75,3 +75,30 @@ $ objdump -d simd_example | grep -E 'xmm|ymm|zmm'
     1385:	c5 fa 58 04 06       	vaddss (%rsi,%rax,1),%xmm0,%xmm0
     138a:	c5 fa 11 04 02       	vmovss %xmm0,(%rdx,%rax,1)
 ```
+
+# On ARM64 aka Aarch64
+```
+gcc -O3 -march=native -ftree-vectorize -o simd_example simd_example.c
+```
+Check:
+```
+$ objdump -d simd_example | grep -E 'v[0-9]+|q[0-9]+'
+ 73c:	4f000483 	movi	v3.4s, #0x4
+ 744:	3dc27422 	ldr	q2, [x1, #2512]
+ 750:	4ea21c40 	mov	v0.16b, v2.16b
+ 754:	4ea38442 	add	v2.4s, v2.4s, v3.4s
+ 758:	4f215401 	shl	v1.4s, v0.4s, #1
+ 75c:	4e21d800 	scvtf	v0.4s, v0.4s
+ 760:	4e21d821 	scvtf	v1.4s, v1.4s
+ 764:	3ca16a80 	str	q0, [x20, x1]
+ 768:	3ca16a61 	str	q1, [x19, x1]
+ 780:	3ce16a60 	ldr	q0, [x19, x1]
+ 784:	3ce16a81 	ldr	q1, [x20, x1]
+ 788:	4e21d400 	fadd	v0.4s, v0.4s, v1.4s
+ 78c:	3ca16aa0 	str	q0, [x21, x1]
+ 940:	3ce36800 	ldr	q0, [x0, x3]
+ 944:	3ce36821 	ldr	q1, [x1, x3]
+ 948:	4e21d400 	fadd	v0.4s, v0.4s, v1.4s
+ 94c:	3ca36840 	str	q0, [x2, x3]
+```
+So SIMD, because v0–v31 → NEON/SIMD registers (AArch64)
