@@ -25,6 +25,17 @@ vsetvli
 vsll.vi
 ```
 
+Or extra info during compiling:
+
+```
+$ gcc -O3 -march=rv64gcv -ftree-vectorize -fopt-info-vec-optimized -o simd_example simd_example.c
+
+simd_example.c:7:23: optimized: loop vectorized using variable length vectors
+simd_example.c:7:23: optimized:  loop versioned for vectorization because of possible aliasing
+simd_example.c:7:23: optimized: loop vectorized using variable length vectors
+simd_example.c:17:23: optimized: loop vectorized using variable length vectors
+```
+
 # On X86
 
 ```
