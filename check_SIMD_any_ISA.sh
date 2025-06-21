@@ -27,7 +27,7 @@ if echo "$ARCH_INFO" | grep -q "x86-64"; then
 elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
     echo "Detected ARM64 (AArch64)"
     #./run_arm.sh "$BINARY"
-    if objdump -d $1 | grep -E 'v[0-9]+|q[0-9]+'; then
+    if objdump -d $1 | grep -q -E 'v[0-9]+|q[0-9]+'; then
         echo "Match found: SIMD"
         exit 0
     else
@@ -38,7 +38,7 @@ elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
 elif echo "$ARCH_INFO" | grep -qi "RISC-V"; then
     echo "Detected RISC-V"
     #./run_riscv.sh "$BINARY"
-    if objdump -d $1 | grep -E 'v[0-9]+'; then
+    if objdump -d $1 | grep -q -E 'v[0-9]+'; then
         echo "Match found: SIMD"
         exit 0
     else
