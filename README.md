@@ -30,3 +30,12 @@ vsll.vi
 ```
 gcc -O3 -march=native -ftree-vectorize -o simd_example simd_example.c
 ```
+or
+```
+$ gcc -O3 -march=native -ftree-vectorize -fopt-info-vec-optimized simd_example.c
+simd_example.c:7:23: optimized: loop vectorized using 32 byte vectors
+simd_example.c:7:23: optimized:  loop versioned for vectorization because of possible aliasing
+simd_example.c:7:23: optimized: loop vectorized using 32 byte vectors
+simd_example.c:17:23: optimized: loop vectorized using 32 byte vectors
+```
+
