@@ -8,6 +8,20 @@ Prompt: 'an example pure-C program that results in SIMD code"
 
 ```
 gcc -O3 -march=rv64gcv -ftree-vectorize -o simd_example simd_example.c
+```
+
+Or extra info during compiling:
+
+```
+$ gcc -O3 -march=rv64gcv -ftree-vectorize -fopt-info-vec-optimized -o simd_example simd_example.c
+
+simd_example.c:7:23: optimized: loop vectorized using variable length vectors
+simd_example.c:7:23: optimized:  loop versioned for vectorization because of possible aliasing
+simd_example.c:7:23: optimized: loop vectorized using variable length vectors
+simd_example.c:17:23: optimized: loop vectorized using variable length vectors
+```
+Check there are SIMD commands:
+```
 objdump -d simd_example | awk '{ print $3 }'  | sort -u | grep -E "^v"
 ```
 
@@ -45,16 +59,6 @@ $ objdump -d simd_example | grep -E 'v[0-9]+'
    106f6:	020660a7          	vse32.v	v1,(a2)
 ```
 
-Or extra info during compiling:
-
-```
-$ gcc -O3 -march=rv64gcv -ftree-vectorize -fopt-info-vec-optimized -o simd_example simd_example.c
-
-simd_example.c:7:23: optimized: loop vectorized using variable length vectors
-simd_example.c:7:23: optimized:  loop versioned for vectorization because of possible aliasing
-simd_example.c:7:23: optimized: loop vectorized using variable length vectors
-simd_example.c:17:23: optimized: loop vectorized using variable length vectors
-```
 
 # On X86
 
