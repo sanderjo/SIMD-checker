@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # of a binary file, check if there are SIMD commands
+# works on 64-bit x86, RISCV-V and ARM
 
 BINARY="$1"
 
