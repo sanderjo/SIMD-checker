@@ -13,6 +13,12 @@ fi
 ARCH_INFO=$(file "$BINARY")
 #echo "$ARCH_INFO"
 
+if echo "$ARCH_INFO" | grep -q "ELF"; then
+    echo "ELF binary. Good."
+else
+        echo "No ELF. Exiting."
+        exit 1
+fi
 
 if echo "$ARCH_INFO" | grep -q "x86-64"; then
     echo "Detected x86_64"
