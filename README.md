@@ -1,6 +1,42 @@
-# C code generated with ChatGPT
+# SIMD-checker: does a Linux binary contain SIMD code?
+
+
+```
+$ ./SIMD_checker.sh ~/nzbget/nzbget
+ELF binary. Good.
+Detected x86_64
+Match found: SIMD
+```
+
+```
+./SIMD_checker.sh /usr/lib/python3/dist-packages/sabctools/sabctools.cpython-313-x86_64-linux-gnu.so
+ELF binary. Good.
+Detected x86_64
+Match found: SIMD
+```
+
+# example C code to results in SIMD code generated with ChatGPT
 
 Prompt: 'an example pure-C program that results in SIMD code"
+
+
+## x86-64
+
+```
+$ gcc -O3 -march=native -ftree-vectorize -fopt-info-vec-optimized  -o simd_example simd_example.c
+simd_example.c:7:23: optimized: loop vectorized using 32 byte vectors
+simd_example.c:7:23: optimized:  loop versioned for vectorization because of possible aliasing
+simd_example.c:7:23: optimized: loop vectorized using 32 byte vectors
+simd_example.c:17:23: optimized: loop vectorized using 32 byte vectors
+```
+
+```
+$ ./SIMD_checker.sh simd_example
+ELF binary. Good.
+Detected x86_64
+Match found: SIMD
+```
+
 
 
 
