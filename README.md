@@ -1,5 +1,6 @@
 # SIMD-checker: does a Linux binary contain SIMD code?
 
+Works on x86, ARM and RISC-V.
 
 ```
 $ ./SIMD_checker.sh ~/nzbget/nzbget
@@ -13,6 +14,14 @@ Match found: SIMD
 ELF binary. Good.
 Detected x86_64
 Match found: SIMD
+```
+
+```
+./SIMD_checker.sh /usr/bin/python3.12
+ELF binary. Good.
+Detected RISC-V
+Match found: SIMD
+
 ```
 
 # example C code to results in SIMD code generated with ChatGPT
