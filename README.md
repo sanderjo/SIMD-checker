@@ -17,6 +17,14 @@ Match found: SIMD
 ```
 
 ```
+$ ./SIMD_checker.sh /usr/bin/python3.12
+ELF binary. Good.
+Detected x86_64
+Match found: SIMD
+```
+
+
+```
 ./SIMD_checker.sh /usr/bin/python3.12
 ELF binary. Good.
 Detected RISC-V
