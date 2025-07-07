@@ -14,3 +14,18 @@
 
 ➜  build git:(develop) objdump -d nzbget.riscv-non-simd | grep  -P '[ \t]v' | head
 ➜  build git:(develop)  
+
+
+# or let objdump print only commands (and variables) and no addresses nor hex, and check "v after tab-or-space":
+
+➜  build git:(develop) objdump --no-show-raw-insn --no-addresses  -d nzbget | grep -P '^[ \t]v' | head
+        vsetivli        zero,8,e16,m1,ta,ma
+        vmv.v.x v1,a5
+        vslide1up.vx    v2,v1,t1
+        vslide1up.vx    v1,v2,a4
+        vslide1up.vx    v8,v1,zero
+        vmv.v.x v2,a5
+        vxor.vv v2,v2,v8
+        vslideup.vi     v8,v2,4
+        vmv.v.x v1,a5
+        vsetivli        zero,16,e8,m1,ta,ma
