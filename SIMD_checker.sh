@@ -12,14 +12,13 @@ fi
 
 echo -n $1 " "
 
-echo -n $1 " "
+
 
 ARCH_INFO=$(file "$BINARY")
 #echo -n "$ARCH_INFO"
-#echo -n "$ARCH_INFO"
+
 
 if echo "$ARCH_INFO" | grep -q "ELF"; then
-    echo -n "ELF binary. "
     echo -n "ELF binary. "
 else
         echo "No ELF. Exiting."
@@ -43,10 +42,7 @@ elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
     if objdump -d $1 | grep -q -E 'v[0-9]+|q[0-9]+'; then
         echo -n "Match found: SIMD "
         #exit 0
-        echo -n "Match found: SIMD "
-        #exit 0
     else
-        echo "No match found: no SIMD "
         echo "No match found: no SIMD "
         exit 1
     fi
@@ -70,19 +66,16 @@ elif echo "$ARCH_INFO" | grep -qi "RISC-V "; then
 # are these still around?
 elif echo "$ARCH_INFO" | grep -q "Intel 80386"; then
     echo -n "Detected x86 (32-bit) "
-    echo -n "Detected x86 (32-bit) "
     ./run_x86.sh "$BINARY"
 
 # check on old Raspi?
 elif echo "$ARCH_INFO" | grep -qi "ARM"; then
-    echo -n "Detected ARM "
     echo -n "Detected ARM "
     ./run_arm.sh "$BINARY"
 
 
 
 else
-    echo -n "Unknown architecture:"
     echo -n "Unknown architecture:"
     echo "$ARCH_INFO"
     exit 2
