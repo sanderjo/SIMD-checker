@@ -13,10 +13,15 @@ fi
 echo -n $1 " "
 
 
-# Use 'file' command to get architecture information
+# Use 'file' command to get architecture information of the file given as argument
 ARCH_INFO=$(file "$BINARY")
 #echo -n "$ARCH_INFO"
 
+# check if 'objdump' is not available
+if ! command -v objdump &> /dev/null; then
+    echo "objdump could not be found"
+    exit 1
+fi 
 
 # First check if the file is an ELF binary
 if echo "$ARCH_INFO" | grep -q "ELF"; then
@@ -56,9 +61,7 @@ elif echo "$ARCH_INFO" | grep -qi "RISC-V "; then
         exit 1
     fi
 
-# Older ISA's
-
-# are these still around?
+# Older ISA's ... are these still around?
 elif echo "$ARCH_INFO" | grep -q "Intel 80386"; then
     echo -n "Detected x86 (32-bit) "
     ./run_x86.sh "$BINARY"
@@ -68,14 +71,10 @@ elif echo "$ARCH_INFO" | grep -qi "ARM"; then
     echo -n "Detected ARM "
     ./run_arm.sh "$BINARY"
 
-
-
 else
     echo -n "Unknown architecture:"
     echo "$ARCH_INFO"
     exit 2
 fi
-
-echo " "
 
 echo " "
