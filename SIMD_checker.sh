@@ -10,46 +10,48 @@ if [ ! -f "$BINARY" ]; then
     exit 1
 fi
 
+echo -n $1 " "
+
 ARCH_INFO=$(file "$BINARY")
-#echo "$ARCH_INFO"
+#echo -n "$ARCH_INFO"
 
 if echo "$ARCH_INFO" | grep -q "ELF"; then
-    echo "ELF binary. Good."
+    echo -n "ELF binary. "
 else
         echo "No ELF. Exiting."
         exit 1
 fi
 
 if echo "$ARCH_INFO" | grep -q "x86-64"; then
-    echo "Detected x86_64"
-    #./run_x86.sh "$BINARY"
+    echo -n "Detected x86_64 "
     if objdump -d $1 | grep -q -E 'xmm|ymm|zmm'; then
-        echo "Match found: SIMD"
-        exit 0
+        echo -n "SIMD "
+        #exit 0
     else
-        echo "No match found: no SIMD"
+        echo "no SIMD "
         exit 1
     fi
 
 elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
-    echo "Detected ARM64 (AArch64)"
+    echo -n "Detected ARM64 (AArch64) "
     #./run_arm.sh "$BINARY"
     if objdump -d $1 | grep -q -E 'v[0-9]+|q[0-9]+'; then
-        echo "Match found: SIMD"
-        exit 0
+        echo -n "Match found: SIMD "
+        #exit 0
     else
-        echo "No match found: no SIMD"
+        echo "No match found: no SIMD "
         exit 1
     fi
 
-elif echo "$ARCH_INFO" | grep -qi "RISC-V"; then
-    echo "Detected RISC-V"
+elif echo "$ARCH_INFO" | grep -qi "RISC-V "; then
+    echo -n "Detected RISC-V "
     #./run_riscv.sh "$BINARY"
-    if objdump -d $1 | grep -q -E 'v[0-9]+'; then
-        echo "Match found: SIMD"
-        exit 0
+    #if objdump -d $1 | grep -q -E 'v[0-9]+'; then
+    if objdump --no-show-raw-insn --no-addresses  -d nzbget | grep -P '^[ \t]v'; then
+        echo -n "SIMD "
+        #exit 0
     else
-        echo "No match found: no SIMD"
+        echo "no SIMD "
         exit 1
     fi
 
@@ -57,18 +59,20 @@ elif echo "$ARCH_INFO" | grep -qi "RISC-V"; then
 
 # are these still around?
 elif echo "$ARCH_INFO" | grep -q "Intel 80386"; then
-    echo "Detected x86 (32-bit)"
+    echo -n "Detected x86 (32-bit) "
     ./run_x86.sh "$BINARY"
 
 # check on old Raspi?
 elif echo "$ARCH_INFO" | grep -qi "ARM"; then
-    echo "Detected ARM"
+    echo -n "Detected ARM "
     ./run_arm.sh "$BINARY"
 
 
 
 else
-    echo "Unknown architecture:"
+    echo -n "Unknown architecture:"
     echo "$ARCH_INFO"
     exit 2
 fi
+
+echo " "
