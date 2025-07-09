@@ -17,11 +17,7 @@ echo -n $1 " "
 ARCH_INFO=$(file "$BINARY")
 #echo -n "$ARCH_INFO"
 
-# check if 'objdump' is not available
-if ! command -v objdump &> /dev/null; then
-    echo "objdump could not be found"
-    exit 1
-fi 
+
 
 # First check if the file is an ELF binary
 if echo "$ARCH_INFO" | grep -q "ELF"; then
@@ -30,6 +26,12 @@ else
     echo "No ELF. Exiting."
     exit 1
 fi
+
+# check if 'objdump' is not available
+if ! command -v objdump &> /dev/null; then
+    echo "objdump could not be found"
+    exit 1
+fi 
 
 OBJDUMP_RESULT=$(objdump --no-show-raw-insn --no-addresses  -d "$BINARY")
 
@@ -54,8 +56,7 @@ elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
 
 elif echo "$ARCH_INFO" | grep -qi "RISC-V "; then
     echo -n "Detected RISC-V "
-    #if objdump -d "$1" | grep -q -E 'v[0-9]+'; then
-    if echo "$OBJDUMP_RESULT" | grep -P '^[ \t]v'; then
+    if echo "$OBJDUMP_RESULT" | grep -q -P '^[ \t]v'; then
         echo -n "SIMD "
     else
         echo "no SIMD "
