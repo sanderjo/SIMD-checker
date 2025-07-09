@@ -31,12 +31,13 @@ else
     exit 1
 fi
 
+OBJDUMP_RESULT=$(objdump --no-show-raw-insn --no-addresses  -d "$BINARY")
+
 # Check for architecture and SIMD support
 if echo "$ARCH_INFO" | grep -q "x86-64"; then
     echo -n "Detected x86_64 "
-    if objdump -d $1 | grep -q -E 'xmm|ymm|zmm'; then
+    if echo "$OBJDUMP_RESULT" | grep -q -E 'xmm|ymm|zmm'; then
         echo -n "SIMD "
-        #exit 0
     else
         echo "no SIMD "
         exit 1
@@ -44,7 +45,7 @@ if echo "$ARCH_INFO" | grep -q "x86-64"; then
 
 elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
     echo -n "Detected ARM64 (AArch64) "
-    if objdump -d $1 | grep -q -E 'v[0-9]+|q[0-9]+'; then
+    if echo "$OBJDUMP_RESULT" | grep -q -E 'v[0-9]+|q[0-9]+'; then
         echo -n "SIMD "
     else
         echo "no SIMD "
@@ -53,8 +54,8 @@ elif echo "$ARCH_INFO" | grep -qi "AArch64"; then
 
 elif echo "$ARCH_INFO" | grep -qi "RISC-V "; then
     echo -n "Detected RISC-V "
-    #if objdump -d $1 | grep -q -E 'v[0-9]+'; then
-    if objdump --no-show-raw-insn --no-addresses  -d nzbget | grep -P '^[ \t]v'; then
+    #if objdump -d "$1" | grep -q -E 'v[0-9]+'; then
+    if echo "$OBJDUMP_RESULT" | grep -P '^[ \t]v'; then
         echo -n "SIMD "
     else
         echo "no SIMD "
